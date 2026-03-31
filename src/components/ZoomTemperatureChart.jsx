@@ -21,36 +21,60 @@ ChartJS.register(
   zoomPlugin
 );
 
-const ZoomTemperatureChart = ({ data }) => {
+const ZoomTemperatureChart = ({ data = [] }) => {
+  // ✅ Safe fallback
   const chartData = {
     labels: data.map((item) => item.time),
     datasets: [
       {
         label: "Temperature (°C)",
         data: data.map((item) => item.temperature),
+        borderColor: "#3b82f6",
+        backgroundColor: "#3b82f6",
         borderWidth: 2,
         tension: 0.4,
+        pointRadius: 0, // 🔥 cleaner UI
       },
     ],
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // 🔥 important for height control
     plugins: {
+      legend: {
+        display: true,
+      },
+      tooltip: {
+        mode: "index",
+        intersect: false,
+      },
       zoom: {
         pan: {
           enabled: true,
           mode: "x",
+          modifierKey: "ctrl", // 🔥 mobile scroll fix
         },
         zoom: {
           wheel: {
             enabled: true,
           },
           pinch: {
-            enabled: true,
+            enabled: false, // 🔥 prevent mobile blocking
           },
           mode: "x",
         },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          maxRotation: 0,
+          autoSkip: true,
+        },
+      },
+      y: {
+        beginAtZero: false,
       },
     },
   };
@@ -60,7 +84,13 @@ const ZoomTemperatureChart = ({ data }) => {
       <h2 className="font-bold mb-2">
         Temperature (Zoom & Scroll Enabled)
       </h2>
-      <Line data={chartData} options={options} />
+
+      {/* ✅ SCROLL WRAPPER */}
+      <div className="overflow-x-auto touch-auto">
+        <div className="min-w-[600px] h-[250px] md:h-[300px] pl-4">
+          <Line data={chartData} options={options} />
+        </div>
+      </div>
     </div>
   );
 };
