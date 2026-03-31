@@ -5,30 +5,31 @@
 A responsive weather dashboard built using React.js that provides real-time and historical weather insights using the Open-Meteo API. The application automatically detects the user's location via browser GPS.
 
 ---
-## 🧑‍💻 Getting Started
+
+## Getting Started
 
 Follow these steps to run the project locally:
 
-### 1️ - Clone the repository
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/VinayPandey185/weather-dashboard
+git clone https://github.com/VinayPandey185/weather-dashboard.git
 cd weather-dashboard
 ```
 
-### 2️ - Install dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3 - Run the development server
+### 3. Run the development server
 
 ```bash
 npm run dev
 ```
 
-### 4️ - Open in browser
+### 4. Open in browser
 
 Visit:
 
@@ -48,16 +49,17 @@ npm run build
 
 ## Notes
 
-* Make sure to allow **location access (GPS)** in your browser.
+* Allow location access (GPS) in your browser.
 * Internet connection is required for API calls.
 
+---
 
 ## Features
 
 ### Dashboard (Current Weather)
 
 * Automatic GPS-based location detection
-* Current weather details:
+* Displays:
 
   * Temperature (Min, Max, Current)
   * Humidity
@@ -74,7 +76,7 @@ npm run build
 * CO, NO2, SO2
 * Visualized using charts
 
-###  Hourly Forecast
+### Hourly Forecast
 
 * Temperature (with °C ↔ °F toggle)
 * Humidity
@@ -93,7 +95,7 @@ npm run build
 
 ## Responsiveness
 
-Fully responsive across mobile, tablet, and desktop devices. Charts are scrollable and adapt to smaller screens.
+The application is fully responsive across mobile, tablet, and desktop devices. Charts are scrollable and adapt to smaller screens.
 
 ---
 
@@ -108,30 +110,30 @@ Fully responsive across mobile, tablet, and desktop devices. Charts are scrollab
 
 ## Performance
 
-Optimized API usage and efficient state management to ensure fast data rendering.
+Optimized API usage and efficient state management for fast data rendering.
 
 ---
 
 ## Challenges & Learnings
 
-* Handling multiple APIs (weather + air quality)
-* Managing async data safely using optional chaining
-* Handling null/missing data
+* Handling multiple APIs (weather and air quality)
+* Managing asynchronous data safely using optional chaining
+* Handling null and missing data
 * Building responsive charts with dynamic datasets
 
 ---
 
 ## Future Improvements
 
-* Temperature unit toggle enhancement across all charts
-* Better mobile UI refinements
-* API caching for improved performance
+* Extend temperature toggle to all charts
+* Improve mobile UI further
+* Add API caching for better performance
 
 ---
 
 ## Live Demo
 
-(Vercel link)
+https://weather-dashboard-mu-umber.vercel.app/
 
 ---
 

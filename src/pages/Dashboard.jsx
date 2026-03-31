@@ -35,7 +35,7 @@ import {
 }, [coords]);
 
   if (!data) {
-  return <p className="p-4">Loading weather...</p>;
+  return <p className="text-center text-gray-500">Fetching weather data...</p>;
 }
   // Data
   const tempData = data.hourly.time.map((time, i) => ({
@@ -79,31 +79,31 @@ const convertTemp = (temp) => {
   </h1>
 
   <button
-    onClick={() => setUnit(unit === "C" ? "F" : "C")}
-    className="bg-gray-200 px-3 py-1 rounded shadow"
-  >
-    °{unit}
-  </button>
+  onClick={() => setUnit(unit === "C" ? "F" : "C")}
+  className="bg-gray-200 px-4 py-1 rounded-full shadow hover:bg-gray-300 hover:scale-105 transition-transform duration-200 font-semibold"
+>
+  °{unit}
+</button>
 </div>
 
       {/* CARDS (Balanced + Colored) */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
 
-        <div className="bg-blue-500 text-white p-4 rounded shadow">
+        <div className="bg-blue-500 text-white p-4 rounded shadow hover:scale-105 transition">
           <p>Temperature</p>
           <h2 className="font-bold text-lg">
             {convertTemp(data.current_weather?.temperature)?.toFixed(1)}°{unit}
           </h2>
         </div>
 
-        <div className="bg-green-500 text-white p-4 rounded shadow">
+        <div className="bg-green-500 text-white p-4 rounded shadow hover:scale-105 transition">
           <p>Wind Speed</p>
           <h2 className="font-bold text-lg">
             {data.current_weather.windspeed} km/h
           </h2>
         </div>
 
-        <div className="bg-purple-500 text-white p-4 rounded shadow">
+        <div className="bg-purple-500 text-white p-4 rounded shadow hover:scale-105 transition">
   <p>Time</p>
   <h2 className="font-bold text-lg">
     {data.current_weather?.time
@@ -115,7 +115,7 @@ const convertTemp = (temp) => {
   </h2>
 </div>
 
-      <div className="bg-yellow-500 text-white p-4 rounded shadow">
+      <div className="bg-yellow-500 text-white p-4 rounded shadow hover:scale-105 transition"> 
          <p>Max Temp</p>
          <h2 className="font-bold text-lg">
           {convertTemp(data.daily?.temperature_2m_max?.[0]) !== "--"
@@ -124,7 +124,7 @@ const convertTemp = (temp) => {
           </h2>
       </div>
 
-    <div className="bg-orange-500 text-white p-4 rounded shadow">
+    <div className="bg-orange-500 text-white p-4 rounded shadow hover:scale-105 transition">
         <p>Min Temp</p>
         <h2 className="font-bold text-lg">
         {convertTemp(data.daily?.temperature_2m_min?.[0]) !== "--"
@@ -133,21 +133,21 @@ const convertTemp = (temp) => {
         </h2>
     </div>
 
-        <div className="bg-teal-500 text-white p-4 rounded shadow">
+        <div className="bg-teal-500 text-white p-4 rounded shadow hover:scale-105 transition">
           <p>Humidity</p>
           <h2 className="font-bold text-lg">
             {data.hourly.relativehumidity_2m[0]}%
           </h2>
         </div>
 
-        <div className="bg-cyan-500 text-white p-4 rounded shadow">
+        <div className="bg-cyan-500 text-white p-4 rounded shadow hover:scale-105 transition">
           <p>Precipitation</p>
           <h2 className="font-bold text-lg">
            {data.daily?.precipitation_sum?.[0] ?? "--"} mm
           </h2>
         </div>
 
-        <div className="bg-indigo-500 text-white p-4 rounded shadow">
+        <div className="bg-indigo-500 text-white p-4 rounded shadow hover:scale-105 transition">
   <p>Sunrise</p>
   <h2 className="font-bold text-lg">
     {data.daily?.sunrise?.[0]
@@ -159,7 +159,7 @@ const convertTemp = (temp) => {
   </h2>
 </div>
 
-<div className="bg-pink-500 text-white p-4 rounded shadow">
+<div className="bg-pink-500 text-white p-4 rounded shadow hover:scale-105 transition">
   <p>Sunset</p>
   <h2 className="font-bold text-lg">
   {data.daily?.sunset?.[0]
@@ -170,19 +170,19 @@ const convertTemp = (temp) => {
     : "--"}
 </h2>
 </div>
-        <div className="bg-red-500 text-white p-4 rounded shadow">
+        <div className="bg-red-500 text-white p-4 rounded shadow hover:scale-105 transition">
             <p>UV Index</p>
             <h2>
                 {data.hourly?.uv_index?.[currentHour] ?? "--"}
             </h2>
         </div>
 
-<div className="bg-gray-500 text-white p-4 rounded shadow">
+<div className="bg-gray-500 text-white p-4 rounded shadow hover:scale-105 transition">
   <p>Visibility</p>
   <h2>{data.hourly.visibility?.[0] ?? "--"} m</h2>
 </div>
 
-<div className="bg-blue-700 text-white p-4 rounded shadow">
+<div className="bg-blue-700 text-white p-4 rounded shadow hover:scale-105 transition">
   <p>Rain Probability</p>
   <h2>{data.hourly.precipitation_probability?.[0] ?? "--"}%</h2>
 </div>
