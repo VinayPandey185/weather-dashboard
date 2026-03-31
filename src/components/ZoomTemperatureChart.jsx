@@ -82,10 +82,10 @@ const ZoomTemperatureChart = ({ data = [] }) => {
         Temperature (Zoom & Scroll Enabled)
       </h2>
 
-      {/* 🔥 FINAL FIX WRAPPER */}
+      {/* WRAPPER */}
       <div
         className="overflow-x-auto"
-        style={{ touchAction: "pan-x" }}
+        style={{ touchAction: "auto" }}
       >
         <div className="min-w-[600px] h-[250px] md:h-[300px] pl-4">
           <Line data={chartData} options={options} />
