@@ -22,7 +22,6 @@ ChartJS.register(
 );
 
 const ZoomTemperatureChart = ({ data = [] }) => {
-  // ✅ Safe fallback
   const chartData = {
     labels: data.map((item) => item.time),
     datasets: [
@@ -33,14 +32,14 @@ const ZoomTemperatureChart = ({ data = [] }) => {
         backgroundColor: "#3b82f6",
         borderWidth: 2,
         tension: 0.4,
-        pointRadius: 0, // 🔥 cleaner UI
+        pointRadius: 0,
       },
     ],
   };
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // 🔥 important for height control
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
@@ -51,16 +50,14 @@ const ZoomTemperatureChart = ({ data = [] }) => {
       },
       zoom: {
         pan: {
-          enabled: true,
-          mode: "x",
-          modifierKey: "ctrl", // 🔥 mobile scroll fix
+          enabled: false, // 🔥 disable pan for mobile scroll
         },
         zoom: {
           wheel: {
             enabled: true,
           },
           pinch: {
-            enabled: false, // 🔥 prevent mobile blocking
+            enabled: false, // 🔥 disable pinch (important)
           },
           mode: "x",
         },
@@ -85,8 +82,11 @@ const ZoomTemperatureChart = ({ data = [] }) => {
         Temperature (Zoom & Scroll Enabled)
       </h2>
 
-      {/* ✅ SCROLL WRAPPER */}
-      <div className="overflow-x-auto touch-auto">
+      {/* 🔥 FINAL FIX WRAPPER */}
+      <div
+        className="overflow-x-auto"
+        style={{ touchAction: "pan-x" }}
+      >
         <div className="min-w-[600px] h-[250px] md:h-[300px] pl-4">
           <Line data={chartData} options={options} />
         </div>
