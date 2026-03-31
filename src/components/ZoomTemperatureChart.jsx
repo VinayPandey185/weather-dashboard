@@ -40,6 +40,7 @@ const ZoomTemperatureChart = ({ data = [] }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+
     plugins: {
       legend: {
         display: true,
@@ -48,21 +49,26 @@ const ZoomTemperatureChart = ({ data = [] }) => {
         mode: "index",
         intersect: false,
       },
+
       zoom: {
         pan: {
-          enabled: false, // 🔥 disable pan for mobile scroll
+          enabled: false, // ❌ disable pan (important for mobile)
         },
         zoom: {
           wheel: {
-            enabled: true,
+            enabled: true, // desktop zoom
           },
           pinch: {
-            enabled: false, // 🔥 disable pinch (important)
+            enabled: false, // ❌ disable pinch
+          },
+          drag: {
+            enabled: false, // ❌ VERY IMPORTANT (fix mobile scroll)
           },
           mode: "x",
         },
       },
     },
+
     scales: {
       x: {
         ticks: {
@@ -79,13 +85,13 @@ const ZoomTemperatureChart = ({ data = [] }) => {
   return (
     <div className="bg-white p-4 rounded shadow mt-6">
       <h2 className="font-bold mb-2">
-        Temperature (Zoom & Scroll Enabled)
+        Temperature (Scroll Enabled)
       </h2>
 
-      {/* WRAPPER */}
+      {/* ✅ SINGLE scroll container (mobile safe) */}
       <div
         className="overflow-x-auto"
-        style={{ touchAction: "auto" }}
+        style={{ touchAction: "pan-y" }} // ✅ allow vertical scroll
       >
         <div className="min-w-[600px] h-[250px] md:h-[300px] pl-4">
           <Line data={chartData} options={options} />
