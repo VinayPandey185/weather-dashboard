@@ -50,14 +50,14 @@ const ZoomTemperatureChart = ({ data = [] }) => {
       },
       zoom: {
         pan: {
-          enabled: false, // 🔥 disable pan for mobile scroll
+          enabled: false, 
         },
         zoom: {
           wheel: {
             enabled: true,
           },
           pinch: {
-            enabled: false, // 🔥 disable pinch (important)
+            enabled: false, 
           },
           mode: "x",
         },

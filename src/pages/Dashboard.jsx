@@ -48,6 +48,7 @@ import {
     humidity: data.hourly.relativehumidity_2m[i],
   }));
 
+  console.log("Precip:", data.hourly.precipitation);
   const precipitationData = data.hourly.time.map((time, i) => ({
   time: new Date(time).toLocaleTimeString([], { hour: "2-digit" }),
   precipitation: data.hourly.precipitation?.[i] ?? 0,
