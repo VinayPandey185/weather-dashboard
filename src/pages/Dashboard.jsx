@@ -191,9 +191,12 @@ const convertTemp = (temp) => {
       </div>
 
       {/* MAIN CHART */}
-      <div className="bg-white p-4 rounded shadow">
-  <ZoomTemperatureChart data={tempData} />
+      <div className="bg-white p-4 rounded shadow overflow-x-auto">
+  <div className="min-w-[600px] md:min-w-full h-[250px] md:h-[300px]">
+    <ZoomTemperatureChart data={tempData} />
+  </div>
 </div>
+
       {/* OTHER CHARTS */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
 
