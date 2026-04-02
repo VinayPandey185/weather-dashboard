@@ -17,6 +17,7 @@ const Analytics = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     const diffDays =
@@ -32,6 +33,7 @@ const Analytics = () => {
     }
 
     const fetchData = async () => {
+      setLoading(true); 
       try {
         const res = await axios.get(
           `https://archive-api.open-meteo.com/v1/archive?latitude=18.52&longitude=73.85&start_date=${startDate
@@ -42,7 +44,8 @@ const Analytics = () => {
         );
 
         const formatted = res.data.daily.time.map((date, i) => ({
-          date,
+          // DATE FORMAT (dd/mm/yyyy)
+          date: new Date(date).toLocaleDateString("en-GB"),
           max: res.data.daily.temperature_2m_max[i],
           min: res.data.daily.temperature_2m_min[i],
           rain: res.data.daily.precipitation_sum[i],
@@ -52,6 +55,8 @@ const Analytics = () => {
       } catch (err) {
         console.error(err);
         setError("Failed to load data");
+      } finally {
+        setLoading(false); 
       }
     };
 
@@ -62,7 +67,7 @@ const Analytics = () => {
     <div className="p-4 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">Analytics</h1>
 
-      {/* Error Message */}
+      {/* Error */}
       {error && (
         <p className="text-red-500 mb-4">{error}</p>
       )}
@@ -75,6 +80,7 @@ const Analytics = () => {
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             className="border p-2 rounded"
+            dateFormat="dd/MM/yyyy" 
           />
         </div>
 
@@ -84,6 +90,7 @@ const Analytics = () => {
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             className="border p-2 rounded"
+            dateFormat="dd/MM/yyyy" 
           />
         </div>
       </div>
@@ -92,13 +99,13 @@ const Analytics = () => {
       <div className="bg-white p-4 rounded shadow">
         <h2 className="font-bold mb-2">Temperature Trends</h2>
 
-          {chartData.length === 0 ? (
-            <p>Loading data...</p>
-          ) : chartData.length === 1 ? (
-  <p className="text-gray-500">
-    Please select a wider date range to view trends
-  </p>
-          ) : (
+        {loading ? (
+          <p>Loading data...</p>
+        ) : chartData.length <= 1 ? (
+          <p className="text-gray-500">
+            Please select a wider date range to view trends
+          </p>
+        ) : (
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData}>
               <XAxis dataKey="date" />
@@ -124,15 +131,16 @@ const Analytics = () => {
 
       {/* Precipitation Chart */}
       <div className="bg-white p-4 rounded shadow mt-6">
-        <h2 className="font-bold mb-2">Precipitation</h2>
-        {chartData.length === 0 ? (
+        <h2 className="font-bold mb-2">Precipitation Trends</h2>
+
+        {loading ? (
           <p>Loading data...</p>
-        ) : chartData.length === 1 ? (
+        ) : chartData.length <= 1 ? (
           <p className="text-gray-500">
-          Please select a wider date range to view trends
+            Please select a wider date range to view trends
           </p>
         ) : (
-  <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData}>
               <XAxis dataKey="date" />
               <YAxis />
@@ -142,7 +150,7 @@ const Analytics = () => {
                 type="monotone"
                 dataKey="rain"
                 stroke="#06b6d4"
-                name="Rain"
+                name="Rain (mm)"
               />
             </LineChart>
           </ResponsiveContainer>

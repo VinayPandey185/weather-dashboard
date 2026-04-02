@@ -12,8 +12,8 @@ export const useLocation = () => {
         });
       },
       () => {
-        console.log("Location denied, using default");
-        setCoords({ lat: 18.52, lon: 73.85 }); // fallback Pune
+        // fallback to Pune if location denied
+        setCoords({ lat: 18.52, lon: 73.85 });
       }
     );
   }, []);

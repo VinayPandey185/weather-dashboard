@@ -17,6 +17,7 @@ import {
         const [data, setData] = useState(null);
         const [unit, setUnit] = useState("C");
         const currentHour = new Date().getHours();
+        const [currentTime, setCurrentTime] = useState(new Date());
 
 
   useEffect(() => {
@@ -34,9 +35,18 @@ import {
   loadData();
 }, [coords]);
 
+useEffect(() => {
+  const interval = setInterval(() => {
+    setCurrentTime(new Date());
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, []);
+
   if (!data) {
   return <p className="text-center text-gray-500">Fetching weather data...</p>;
 }
+
   // Data
   const tempData = data.hourly.time.map((time, i) => ({
     time: new Date(time).toLocaleTimeString([], { hour: "2-digit" }),
@@ -48,7 +58,6 @@ import {
     humidity: data.hourly.relativehumidity_2m[i],
   }));
 
-  console.log("Precip:", data.hourly.precipitation);
   const precipitationData = data.hourly.time.map((time, i) => ({
   time: new Date(time).toLocaleTimeString([], { hour: "2-digit" }),
   precipitation: data.hourly.precipitation?.[i] ?? 0,
@@ -105,16 +114,15 @@ const convertTemp = (temp) => {
         </div>
 
         <div className="bg-purple-500 text-white p-4 rounded shadow hover:scale-105 transition">
-  <p>Time</p>
-  <h2 className="font-bold text-lg">
-    {data.current_weather?.time
-      ? new Date(data.current_weather.time).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      : "--"}
-  </h2>
-</div>
+          <p>Current Time</p>
+          <h2 className="font-bold text-lg">
+            {currentTime.toLocaleTimeString([], {
+             hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}
+        </h2>
+      </div>
 
       <div className="bg-yellow-500 text-white p-4 rounded shadow hover:scale-105 transition"> 
          <p>Max Temp</p>
@@ -148,14 +156,15 @@ const convertTemp = (temp) => {
           </h2>
         </div>
 
-        <div className="bg-indigo-500 text-white p-4 rounded shadow hover:scale-105 transition">
+<div className="bg-indigo-500 text-white p-4 rounded shadow hover:scale-105 transition">
   <p>Sunrise</p>
   <h2 className="font-bold text-lg">
-    {data.daily?.sunrise?.[0]
-      ? new Date(data.daily.sunrise[0]).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
+    {data?.daily?.sunrise?.[0]
+      ? new Date(data.daily.sunrise[0]).toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
       : "--"}
   </h2>
 </div>
@@ -163,13 +172,14 @@ const convertTemp = (temp) => {
 <div className="bg-pink-500 text-white p-4 rounded shadow hover:scale-105 transition">
   <p>Sunset</p>
   <h2 className="font-bold text-lg">
-  {data.daily?.sunset?.[0]
-    ? new Date(data.daily.sunset[0]).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    : "--"}
-</h2>
+    {data?.daily?.sunset?.[0]
+      ? new Date(data.daily.sunset[0]).toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      : "--"}
+  </h2>
 </div>
         <div className="bg-red-500 text-white p-4 rounded shadow hover:scale-105 transition">
             <p>UV Index</p>
