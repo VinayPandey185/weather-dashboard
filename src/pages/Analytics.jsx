@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
+
+import { useLocation } from "../hooks/useLocation";
+import { fetchAnalytics } from "../services/weatherApi";
 
 import {
   LineChart,
@@ -13,19 +15,23 @@ import {
 } from "recharts";
 
 const Analytics = () => {
+  const coords = useLocation();
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [chartData, setChartData] = useState([]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const diffDays =
-      (endDate - startDate) / (1000 * 60 * 60 * 24);
+    if (!coords) return;
 
-    // Validate date range
+    const diffDays = Math.ceil(
+      (endDate - startDate) / (1000 * 60 * 60 * 24)
+    );
+
     if (diffDays > 730) {
-      setError("Max range is 2 years");
+      setError("Date range should not exceed 2 years (max 730 days).");
       setChartData([]);
       return;
     } else {
@@ -33,46 +39,54 @@ const Analytics = () => {
     }
 
     const fetchData = async () => {
-      setLoading(true); 
+      setLoading(true);
       try {
-        const res = await axios.get(
-          `https://archive-api.open-meteo.com/v1/archive?latitude=18.52&longitude=73.85&start_date=${startDate
-            .toISOString()
-            .split("T")[0]}&end_date=${endDate
-            .toISOString()
-            .split("T")[0]}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto`
+        const res = await fetchAnalytics(
+          coords.lat,
+          coords.lon,
+          startDate.toISOString().split("T")[0],
+          endDate.toISOString().split("T")[0]
         );
 
         const formatted = res.data.daily.time.map((date, i) => ({
-          // DATE FORMAT (dd/mm/yyyy)
           date: new Date(date).toLocaleDateString("en-GB"),
+
           max: res.data.daily.temperature_2m_max[i],
           min: res.data.daily.temperature_2m_min[i],
           rain: res.data.daily.precipitation_sum[i],
+
+          // WIND
+          wind: res.data.daily.windspeed_10m_max?.[i] ?? 0,
+
+          // AIR QUALITY
+          pm10: res.data.daily.pm10?.[i] ?? 0,
+          pm25: res.data.daily.pm2_5?.[i] ?? 0,
+
+          // SUN TIMES
+          sunrise: res.data.daily.sunrise?.[i],
+          sunset: res.data.daily.sunset?.[i],
         }));
 
         setChartData(formatted);
       } catch (err) {
-        console.error(err);
+        console.error("Analytics Error:", err);
         setError("Failed to load data");
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, coords]);
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">Analytics</h1>
 
-      {/* Error */}
-      {error && (
-        <p className="text-red-500 mb-4">{error}</p>
-      )}
+      {/* ERROR */}
+      {error && <p className="text-red-500 mb-4">{error}</p>}
 
-      {/* Date Picker */}
+      {/* DATE PICKER */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div>
           <p className="text-sm mb-1">Start Date</p>
@@ -80,7 +94,7 @@ const Analytics = () => {
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             className="border p-2 rounded"
-            dateFormat="dd/MM/yyyy" 
+            dateFormat="dd/MM/yyyy"
           />
         </div>
 
@@ -90,74 +104,96 @@ const Analytics = () => {
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             className="border p-2 rounded"
-            dateFormat="dd/MM/yyyy" 
+            dateFormat="dd/MM/yyyy"
           />
         </div>
       </div>
 
-      {/* Temperature Chart */}
-      <div className="bg-white p-4 rounded shadow">
-        <h2 className="font-bold mb-2">Temperature Trends</h2>
+      {/* TEMPERATURE */}
+      <Chart title="Temperature Trends" loading={loading} data={chartData}>
+        <Line dataKey="max" stroke="#ef4444" name="Max Temp" />
+        <Line dataKey="min" stroke="#3b82f6" name="Min Temp" />
+      </Chart>
 
-        {loading ? (
-          <p>Loading data...</p>
-        ) : chartData.length <= 1 ? (
-          <p className="text-gray-500">
-            Please select a wider date range to view trends
-          </p>
-        ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
+      {/* RAIN */}
+      <Chart title="Precipitation Trends" loading={loading} data={chartData}>
+        <Line dataKey="rain" stroke="#06b6d4" name="Rain (mm)" />
+      </Chart>
 
-              <Line
-                type="monotone"
-                dataKey="max"
-                stroke="#ef4444"
-                name="Max Temp"
-              />
-              <Line
-                type="monotone"
-                dataKey="min"
-                stroke="#3b82f6"
-                name="Min Temp"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        )}
-      </div>
+      {/* WIND */}
+      <Chart title="Wind Speed (Max)" loading={loading} data={chartData}>
+        <Line dataKey="wind" stroke="#22c55e" name="Wind Speed" />
+      </Chart>
 
-      {/* Precipitation Chart */}
+      {/* AIR QUALITY */}
+      <Chart title="Air Quality (PM10)" loading={loading} data={chartData}>
+        <Line dataKey="pm10" stroke="#f97316" name="PM10" />
+      </Chart>
+
+      {/* SUNRISE / SUNSET */}
       <div className="bg-white p-4 rounded shadow mt-6">
-        <h2 className="font-bold mb-2">Precipitation Trends</h2>
+        <h2 className="font-bold mb-2">Sunrise & Sunset</h2>
 
-        {loading ? (
+        {chartData.length === 0 ? (
           <p>Loading data...</p>
-        ) : chartData.length <= 1 ? (
-          <p className="text-gray-500">
-            Please select a wider date range to view trends
-          </p>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            {chartData.slice(0, 10).map((item, i) => (
+              <div key={i} className="border p-2 rounded">
+                <p>{item.date}</p>
 
-              <Line
-                type="monotone"
-                dataKey="rain"
-                stroke="#06b6d4"
-                name="Rain (mm)"
-              />
-            </LineChart>
-          </ResponsiveContainer>
+                <p>
+                  🌅{" "}
+                  {item.sunrise
+                    ? new Date(item.sunrise).toLocaleTimeString("en-IN", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })
+                    : "--"}
+                </p>
+
+                <p>
+                  🌇{" "}
+                  {item.sunset
+                    ? new Date(item.sunset).toLocaleTimeString("en-IN", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })
+                    : "--"}
+                </p>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
   );
 };
+
+/* REUSABLE CHART */
+const Chart = ({ title, loading, data, children }) => (
+  <div className="bg-white p-4 rounded shadow mt-6">
+    <h2 className="font-bold mb-2">{title}</h2>
+
+    {loading ? (
+      <p>Loading data...</p>
+    ) : data.length <= 1 ? (
+      <p className="text-gray-500">
+        Please select a wider date range to view trends
+      </p>
+    ) : (
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          {children}
+        </LineChart>
+      </ResponsiveContainer>
+    )}
+  </div>
+);
 
 export default Analytics;
