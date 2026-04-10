@@ -130,7 +130,7 @@ const Analytics = () => {
         <Line dataKey="pm10" stroke="#f97316" name="PM10" />
       </Chart>
 
-      {/* SUNRISE / SUNSET */}
+      {/* SUNRISE & SUNSET */}
       <div className="bg-white p-4 rounded shadow mt-6">
         <h2 className="font-bold mb-2">Sunrise & Sunset</h2>
 
