@@ -2,7 +2,7 @@
 
 ## Overview
 
-A responsive weather dashboard built using React.js that provides real-time and historical weather insights using the Open-Meteo API. The application automatically detects the user's location via browser GPS.
+A responsive weather dashboard built using React.js that provides real-time and historical weather insights using the Open-Meteo API. The application automatically detects the user's location using browser GPS and displays location-based weather analytics.
 
 ---
 
@@ -15,7 +15,7 @@ Follow these steps to run the project locally:
 ```bash
 git clone https://github.com/VinayPandey185/weather-dashboard.git
 cd weather-dashboard
-```
+````
 
 ### 2. Install dependencies
 
@@ -33,13 +33,13 @@ npm run dev
 
 Visit:
 
-```
+```txt
 http://localhost:5173
 ```
 
 ---
 
-## Build for production
+## Build for Production
 
 ```bash
 npm run build
@@ -49,53 +49,86 @@ npm run build
 
 ## Notes
 
-* Allow location access (GPS) in your browser.
-* Internet connection is required for API calls.
+* Allow location access (GPS) in your browser for dynamic weather data.
+* Internet connection is required for API requests.
+* If location permission is denied, a fallback location may be used.
 
 ---
 
 ## Features
 
-### Dashboard (Current Weather)
+## Dashboard (Current Weather)
 
 * Automatic GPS-based location detection
-* Displays:
+* Current weather overview including:
 
-  * Temperature (Min, Max, Current)
+  * Current Temperature
+  * Minimum / Maximum Temperature
   * Humidity
   * Wind Speed
   * Precipitation
-  * Sunrise & Sunset
+  * Rain Probability
   * UV Index
   * Visibility
-  * Rain Probability
+  * Sunrise & Sunset
+  * Current Time
 
-### Air Quality
+---
 
-* PM10, PM2.5
-* CO, NO2, SO2
-* Visualized using charts
+## Air Quality
 
-### Hourly Forecast
+* Real-time air quality metrics:
 
-* Temperature (with °C ↔ °F toggle)
-* Humidity
-* Precipitation
-* Wind Speed
-* Air Quality (PM10 & PM2.5)
+  * PM10
+  * PM2.5
+  * CO
+  * NO2
+  * SO2
 
-### Analytics (Historical Data)
+* Interactive charts for pollutant trends
 
-* Select custom date range (max 2 years)
-* Temperature trends (Min, Max)
-* Precipitation trends
-* Handles edge cases (single-day selection)
+---
+
+## Hourly Forecast
+
+* Hour-wise weather insights:
+
+  * Temperature
+  * Humidity
+  * Wind Speed
+  * Precipitation
+  * PM10 / PM2.5
+
+* Temperature unit toggle (°C ↔ °F)
+
+---
+
+## Analytics (Historical Data)
+
+* Select custom date range (up to 2 years)
+
+* Historical charts for:
+
+  * Temperature Trends (Min / Max)
+  * Precipitation Trends
+  * Wind Speed Trends
+  * Air Quality Trends (PM10 & PM2.5)
+
+* Sunrise & Sunset historical timings
+
+* Handles single-day and wide-range selections
 
 ---
 
 ## Responsiveness
 
-The application is fully responsive across mobile, tablet, and desktop devices. Charts are scrollable and adapt to smaller screens.
+The application is fully responsive across:
+
+* Mobile
+* Tablet
+* Desktop
+
+Charts are optimized for smaller screens with scroll and zoom support.
 
 ---
 
@@ -103,40 +136,51 @@ The application is fully responsive across mobile, tablet, and desktop devices. 
 
 * React.js
 * Recharts
+* Chart.js
 * Axios
+* Tailwind CSS
 * Open-Meteo API
 
 ---
 
 ## Performance
 
-Optimized API usage and efficient state management for fast data rendering.
+* Optimized API usage
+* Efficient React state management
+* Fast rendering with reusable components
+* Graceful fallback handling for denied location access
 
 ---
 
 ## Challenges & Learnings
 
-* Handling multiple APIs (weather and air quality)
-* Managing asynchronous data safely using optional chaining
-* Handling null and missing data
-* Building responsive charts with dynamic datasets
+* Integrating multiple APIs (weather + air quality + archive data)
+* Managing asynchronous API calls cleanly
+* Creating reusable chart components
+* Handling timezone/date formatting issues
+* Building responsive data visualizations
 
 ---
 
 ## Future Improvements
 
-* Extend temperature toggle to all charts
-* Improve mobile UI further
-* Add API caching for better performance
+* Extend unit conversion across all charts
+* Add city search feature
+* Improve loading skeleton UI
+* Add API caching for faster reloads
+* Add downloadable weather reports
 
 ---
 
 ## Live Demo
 
-https://weather-dashboard-mu-umber.vercel.app/
+[https://weather-dashboard-mu-umber.vercel.app/](https://weather-dashboard-mu-umber.vercel.app/)
 
 ---
 
 ## GitHub Repository
 
-https://github.com/VinayPandey185/weather-dashboard
+[https://github.com/VinayPandey185/weather-dashboard](https://github.com/VinayPandey185/weather-dashboard)
+
+```
+```

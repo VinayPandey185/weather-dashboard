@@ -125,9 +125,21 @@ const Analytics = () => {
         <Line dataKey="wind" stroke="#22c55e" name="Wind Speed" />
       </Chart>
 
-      {/* AIR QUALITY */}
-      <Chart title="Air Quality (PM10)" loading={loading} data={chartData}>
-        <Line dataKey="pm10" stroke="#f97316" name="PM10" />
+    {/* AIR QUALITY */}
+<Chart title="Air Quality (PM10 & PM2.5)" loading={loading} data={chartData}>
+     <Line
+        dataKey="pm10"
+        stroke="#f97316"
+        name="PM10"
+        strokeWidth={2}
+      />
+
+      <Line
+        dataKey="pm25"
+        stroke="#ef4444"
+        name="PM2.5"
+        strokeWidth={2}
+      />
       </Chart>
 
       {/* SUNRISE & SUNSET */}
