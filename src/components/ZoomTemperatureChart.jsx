@@ -36,19 +36,24 @@ const ZoomTemperatureChart = ({ data }) => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
+
     plugins: {
       zoom: {
         pan: {
           enabled: true,
           mode: "x",
         },
+
         zoom: {
           wheel: {
-            enabled: true,
+            enabled: false,
           },
+
           pinch: {
             enabled: true,
           },
+
           mode: "x",
         },
       },
@@ -60,7 +65,18 @@ const ZoomTemperatureChart = ({ data }) => {
       <h2 className="font-bold mb-2">
         Temperature (Zoom & Scroll Enabled)
       </h2>
-      <Line data={chartData} options={options} />
+
+      <div
+        className="overflow-x-auto"
+        style={{
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-y pinch-zoom",
+        }}
+      >
+        <div className="min-w-[700px] h-[300px]">
+          <Line data={chartData} options={options} />
+        </div>
+      </div>
     </div>
   );
 };
